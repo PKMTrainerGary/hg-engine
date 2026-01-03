@@ -1476,11 +1476,6 @@
     .long (((\arg_1 - .) / 4) - 1)
     .endm
 
-    .macro DoubleSize arg_0
-    .long 269
-    .long \arg_0
-    .endm
-
     .equ BASE_ENGINE_BTL_SCR_CMDS_MAX, 269
 
     // .macro YourCustomCommand
