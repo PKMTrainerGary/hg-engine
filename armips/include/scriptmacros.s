@@ -10377,6 +10377,14 @@ PHOTO_BLUE                                  equ 92
 .byte arg1
 .endmacro
 
+// Totem Battle Macro 
+.macro TotemBattleSp, species, level, shiny
+    .halfword 853
+    .halfword species
+    .halfword level
+    .halfword shiny
+.endmacro
+
 // Convenience macros
 
 // Generic compare macro which attempts to deduce argument types based on their values

@@ -1335,7 +1335,7 @@ trainerdata 36, "Joyce"
     endparty
 
 trainerdata 37, "Preston"
-    trainermontype TRAINER_DATA_TYPE_NOTHING
+    trainermontype TRAINER_DATA_TYPE_ITEMS | TRAINER_DATA_TYPE_MOVES | TRAINER_DATA_TYPE_ABILITY | TRAINER_DATA_TYPE_NATURE_SET
     trainerclass TRAINERCLASS_GENTLEMAN
     nummons 2
     item ITEM_FULL_RESTORE
@@ -1345,6 +1345,8 @@ trainerdata 37, "Preston"
     aiflags F_PRIORITIZE_SUPER_EFFECTIVE | 0
     battletype SINGLE_BATTLE
     endentry
+
+
 
     party 37
         // mon 0

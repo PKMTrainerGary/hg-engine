@@ -45,6 +45,14 @@ _079:
     // A wild {0} and {1} appeared!
     PrintGlobalMessage 967, TAG_NICKNAME_NICKNAME, BATTLER_CATEGORY_ENEMY_SLOT_1, BATTLER_CATEGORY_ENEMY_SLOT_2
 
+_TotemEncounter:
+    // You are challenged by Totem {0}!
+    PrintGlobalMessage 1601, TAG_NICKNAME, BATTLER_CATEGORY_ENEMY
+    Wait
+    DoubleSize BATTLER_ENEMY
+    GoTo _SendOutPokemonMessage
+
+
 _084:
     Wait 
     WaitButtonABTime 30
