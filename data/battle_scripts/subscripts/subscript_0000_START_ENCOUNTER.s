@@ -50,7 +50,7 @@ _TotemEncounter:
     PrintGlobalMessage 1601, TAG_NICKNAME, BATTLER_CATEGORY_ENEMY
     Wait
     DoubleSize BATTLER_ENEMY
-    GoTo _SendOutPokemonMessage
+    GoTo _084
 
 
 _084:
