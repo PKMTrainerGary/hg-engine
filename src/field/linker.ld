@@ -1,5 +1,9 @@
 /* Overlay 131 */
 OUTPUT_ARCH(arm)
+
+/* ROM symbols used by this overlay */
+PROVIDE(SetupAndStartWildBattle = 0x023C8CD0);
+
 MEMORY {
 
         rom     : ORIGIN = 0x023C8000, LENGTH = 0x18000

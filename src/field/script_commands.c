@@ -1,6 +1,7 @@
 #include "../../include/types.h"
 #include "../../include/bag.h"
 #include "../../include/battle.h"
+#include "../../include/battle_sp.h"
 #include "../../include/config.h"
 #include "../../include/debug.h"
 #include "../../include/constants/file.h"
@@ -321,5 +322,30 @@ BOOL ScrCmd_BufferItemName(SCRIPTCONTEXT *ctx) {
     u8 idx = ScriptReadByte(ctx);
     u16 itemId = ScriptGetVar(ctx);
     BufferItemNameGiveItem(*msgFmt, idx, itemId);
+    return FALSE;
+}
+
+BOOL ScrCmd_TotemBattle(SCRIPTCONTEXT* ctx)
+{
+    u32* winFlag;
+    u16 species;
+    u8 level;
+    BOOL shiny;
+
+    winFlag = FieldSysGetAttrAddr(ctx->fsys, 24);
+
+    species = ScriptGetVar(ctx);
+    level = ScriptGetVar(ctx);
+    shiny = ScriptReadByte(ctx);
+
+    SetupAndStartTotemBattle(
+        ctx->taskman,
+        species,
+        level,
+        winFlag,
+        TRUE,
+        shiny
+    );
+
     return FALSE;
 }

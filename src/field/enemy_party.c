@@ -16,10 +16,10 @@
 #include "../../include/constants/species.h"
 #include "../../include/constants/weather_numbers.h"
 
-struct BattleSetup LONG_CALL *BattleSetup_New_Tutorial(u32 heapID, FieldSystem *fieldSystem);
-int LONG_CALL BattleSetup_GetWildTransitionEffect(struct BattleSetup *setup);
-int LONG_CALL BattleSetup_GetWildBattleMusic(struct BattleSetup *setup);
-void LONG_CALL *Encounter_New(struct BattleSetup *setup, s32 effect, s32 bgm, u32 *winFlag);
+struct BattleSetup LONG_CALL* BattleSetup_New_Tutorial(u32 heapID, FieldSystem* fieldSystem);
+int LONG_CALL BattleSetup_GetWildTransitionEffect(struct BattleSetup* setup);
+int LONG_CALL BattleSetup_GetWildBattleMusic(struct BattleSetup* setup);
+void LONG_CALL* Encounter_New(struct BattleSetup* setup, s32 effect, s32 bgm, u32* winFlag);
 
 /**
  *  @brief swap two integer values with each other given pointers
@@ -27,7 +27,7 @@ void LONG_CALL *Encounter_New(struct BattleSetup *setup, s32 effect, s32 bgm, u3
  *  @param a first to swap
  *  @param b second to swap
  */
-void swap(int *a, int *b) {
+void swap(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
@@ -41,8 +41,8 @@ void swap(int *a, int *b) {
  */
 void randomize(int arr[], int n) {
     int i;
-    for (i = n-1; i > 0; i--) {
-        int j = gf_rand() % (i+1);
+    for (i = n - 1; i > 0; i--) {
+        int j = gf_rand() % (i + 1);
         swap(&arr[i], &arr[j]);
     }
 }
@@ -56,9 +56,9 @@ extern u32 gLastPokemonLevelForMoneyCalc;
  *  @param num trainer index to read from both ARC_TRAINER_DATA and ARC_TRAINER_PARTY_DATA
  *  @param heapID heap to use for memory usage
  */
-void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
+void MakeTrainerPokemonParty(struct BATTLE_PARAM* bp, int num, int heapID)
 {
-    u8 *buf;
+    u8* buf;
     int i, j;
     u32 rnd_tmp, rnd, seed_tmp;
     u8 pow;
@@ -67,7 +67,7 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
 
     PokeParty_Init(bp->poke_party[num], 6);
 
-    buf = (u8 *)sys_AllocMemory(heapID, sizeof(struct FULL_TRAINER_MON_DATA_STRUCTURE) * 6);
+    buf = (u8*)sys_AllocMemory(heapID, sizeof(struct FULL_TRAINER_MON_DATA_STRUCTURE) * 6);
 
     TT_TrainerPokeDataGet(bp->trainer_id[num], buf);
 
@@ -92,23 +92,23 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
     u8 ivnums[6];
     u8 evnums[6];
     u8 ppcounts[4];
-    u16 *nickname = sys_AllocMemory(heapID, 11*sizeof(u16));
+    u16* nickname = sys_AllocMemory(heapID, 11 * sizeof(u16));
     u8 form_no = 0, abilityslot = 0, nature = 0, ballseal = 0, shinylock = 0, status = 0;
     u32 additionalflags = 0;
 
     int partyOrder[pokecount];
     if (randomorder_flag)
     {
-        if(gf_rand() % 2 == 0)
+        if (gf_rand() % 2 == 0)
         {
-            for(i = 0; i < pokecount; i++)
+            for (i = 0; i < pokecount; i++)
             {
                 partyOrder[i] = pokecount - 1 - i;
             }
         }
         else
         {
-            for(i = 0; i < pokecount; i++)
+            for (i = 0; i < pokecount; i++)
             {
                 partyOrder[i] = i;
             }
@@ -116,7 +116,7 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
     }
     else
     {
-        for(i = 0; i < pokecount; i++)
+        for (i = 0; i < pokecount; i++)
         {
             partyOrder[i] = i;
         }
@@ -125,13 +125,13 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
     if (randomorder_flag && pokecount > 1)
     {
         int numtimes = gf_rand() % 6 + 1;
-        for(i = 0; i < numtimes; i++)
+        for (i = 0; i < numtimes; i++)
         {
             randomize(partyOrder, pokecount);
         }
     }
 
-    struct PartyPokemon * mons[pokecount];
+    struct PartyPokemon* mons[pokecount];
 
     for (i = 0; i < pokecount; i++)
     {
@@ -145,12 +145,12 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         offset++;
 
         // level field
-        level = buf[offset] | (buf[offset+1] << 8);
+        level = buf[offset] | (buf[offset + 1] << 8);
         gLastPokemonLevelForMoneyCalc = level; // ends up being the last level at the end of the loop that we use for the money calc loop default case
         offset += 2;
 
         // species field
-        species = buf[offset] | (buf[offset+1] << 8);
+        species = buf[offset] | (buf[offset + 1] << 8);
         offset += 2;
         form_no = (species & 0xF800) >> 11;
         species &= 0x07FF;
@@ -158,7 +158,7 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         // item field - conditional
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_ITEMS)
         {
-            item = buf[offset] | (buf[offset+1] << 8);
+            item = buf[offset] | (buf[offset + 1] << 8);
             offset += 2;
         }
 
@@ -167,7 +167,7 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         {
             for (j = 0; j < 4; j++)
             {
-                moves[j] = buf[offset] | (buf[offset+1] << 8);
+                moves[j] = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
         }
@@ -175,29 +175,29 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         // ability field
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_ABILITY)
         {
-            ability = buf[offset] | (buf[offset+1] << 8);
+            ability = buf[offset] | (buf[offset + 1] << 8);
             offset += 2;
         }
 
         // custom ball field
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_BALL)
         {
-            ball = buf[offset] | (buf[offset+1] << 8);
+            ball = buf[offset] | (buf[offset + 1] << 8);
             offset += 2;
         }
 
         // ivs and evs fields
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_IV_EV_SET)
         {
-            for(j = 0; j < 6; j++)
+            for (j = 0; j < 6; j++)
             {
                 ivnums[j] = buf[offset];
-                if(ivnums[j] > 31)
+                if (ivnums[j] > 31)
                     ivnums[j] = 31;
                 offset++;
             }
 
-            for(j = 0; j < 6; j++)
+            for (j = 0; j < 6; j++)
             {
                 evnums[j] = buf[offset];
                 offset++;
@@ -219,64 +219,64 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         }
 
         // reads extra flags from the trainer pokemon file
-        if(bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_ADDITIONAL_FLAGS)
+        if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_ADDITIONAL_FLAGS)
         {
-            additionalflags = buf[offset] | (buf[offset+1] << 8) | (buf[offset+2] << 16) | (buf[offset+3] << 24);
+            additionalflags = buf[offset] | (buf[offset + 1] << 8) | (buf[offset + 2] << 16) | (buf[offset + 3] << 24);
             offset += 4;
 
             // status pre-set field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_STATUS)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_STATUS)
             {
-                status = buf[offset] | (buf[offset+1] << 8) | (buf[offset+2] << 16) | (buf[offset+3] << 24);
+                status = buf[offset] | (buf[offset + 1] << 8) | (buf[offset + 2] << 16) | (buf[offset + 3] << 24);
                 offset += 4;
             }
 
             // custom hp stat field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_HP)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_HP)
             {
-                hp = buf[offset] | (buf[offset+1] << 8);
+                hp = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
 
             // custom atk stat field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_ATK)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_ATK)
             {
-                atk = buf[offset] | (buf[offset+1] << 8);
+                atk = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
 
             // custom def stat field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_DEF)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_DEF)
             {
-                def = buf[offset] | (buf[offset+1] << 8);
+                def = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
 
             // custom speed stat field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_SPEED)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_SPEED)
             {
-                speed = buf[offset] | (buf[offset+1] << 8);
+                speed = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
 
             // custom spatk stat field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_SP_ATK)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_SP_ATK)
             {
-                spatk = buf[offset] | (buf[offset+1] << 8);
+                spatk = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
 
             // custom spdef stat field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_SP_DEF)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_SP_DEF)
             {
-                spdef = buf[offset] | (buf[offset+1] << 8);
+                spdef = buf[offset] | (buf[offset + 1] << 8);
                 offset += 2;
             }
 
             // move PP counts field
-            if(additionalflags & TRAINER_DATA_EXTRA_TYPE_PP_COUNTS)
+            if (additionalflags & TRAINER_DATA_EXTRA_TYPE_PP_COUNTS)
             {
-                for(j = 0; j < 4; j++)
+                for (j = 0; j < 4; j++)
                 {
                     ppcounts[j] = buf[offset];
                     offset++;
@@ -286,16 +286,16 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
             // nickname field
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_NICKNAME)
             {
-                for(j = 0; j < 11; j++)
+                for (j = 0; j < 11; j++)
                 {
-                    nickname[j] = buf[offset] | (buf[offset+1] << 8);
+                    nickname[j] = buf[offset] | (buf[offset + 1] << 8);
                     offset += 2;
                 }
             }
         }
 
         // ball seal field
-        ballseal = buf[offset] | (buf[offset+1] << 8);
+        ballseal = buf[offset] | (buf[offset + 1] << 8);
         offset += 2;
 
         // now set mon data
@@ -319,15 +319,15 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         {
             if (abilityslot & 1 || abilityslot == 32) // abilityslot 32 gives second slot in vanilla
             {
-                SetMonData(mons[i], MON_DATA_ABILITY, (u16 *)&ab2);
+                SetMonData(mons[i], MON_DATA_ABILITY, (u16*)&ab2);
             }
-            else{
-                SetMonData(mons[i], MON_DATA_ABILITY, (u16 *)&ab1);
+            else {
+                SetMonData(mons[i], MON_DATA_ABILITY, (u16*)&ab1);
             }
         }
         else
         {
-            SetMonData(mons[i], MON_DATA_ABILITY, (u16 *)&ab1);
+            SetMonData(mons[i], MON_DATA_ABILITY, (u16*)&ab1);
         }
 
         // if abilityslot is 2 force hidden ability with the bit set.  this specifically to cover darmanitan with zen mode switching between forms and such.
@@ -335,7 +335,7 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         {
             u16 hiddenability = GetMonHiddenAbility(species, form_no);
             SET_MON_HIDDEN_ABILITY_BIT(mons[i]);
-            SetMonData(mons[i], MON_DATA_ABILITY, (u16 *)&hiddenability);
+            SetMonData(mons[i], MON_DATA_ABILITY, (u16*)&hiddenability);
         }
 
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_ITEMS)
@@ -360,14 +360,14 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         }
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_IV_EV_SET)
         {
-            for(j = 0; j < 6; j++)
+            for (j = 0; j < 6; j++)
             {
-                SetMonData(mons[i],MON_DATA_HP_IV + j, &ivnums[j]);
+                SetMonData(mons[i], MON_DATA_HP_IV + j, &ivnums[j]);
             }
 
-            for(j = 0; j < 6; j++)
+            for (j = 0; j < 6; j++)
             {
-                SetMonData(mons[i],MON_DATA_HP_EV + j, &evnums[j]);
+                SetMonData(mons[i], MON_DATA_HP_EV + j, &evnums[j]);
             }
         }
         if (bp->trainer_data[num].data_type & TRAINER_DATA_TYPE_NATURE_SET)
@@ -397,46 +397,46 @@ void MakeTrainerPokemonParty(struct BATTLE_PARAM *bp, int num, int heapID)
         {
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_STATUS)
             {
-                SetMonData(mons[i],MON_DATA_STATUS, &status);
+                SetMonData(mons[i], MON_DATA_STATUS, &status);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_HP)
             {
-                SetMonData(mons[i],MON_DATA_MAXHP, &hp);
-                SetMonData(mons[i],MON_DATA_HP, &hp);
+                SetMonData(mons[i], MON_DATA_MAXHP, &hp);
+                SetMonData(mons[i], MON_DATA_HP, &hp);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_ATK)
             {
-                SetMonData(mons[i],MON_DATA_ATTACK, &atk);
+                SetMonData(mons[i], MON_DATA_ATTACK, &atk);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_DEF)
             {
-                SetMonData(mons[i],MON_DATA_DEFENSE, &def);
+                SetMonData(mons[i], MON_DATA_DEFENSE, &def);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_SPEED)
             {
-                SetMonData(mons[i],MON_DATA_SPEED, &speed);
+                SetMonData(mons[i], MON_DATA_SPEED, &speed);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_SP_ATK)
             {
-                SetMonData(mons[i],MON_DATA_SPECIAL_ATTACK, &spatk);
+                SetMonData(mons[i], MON_DATA_SPECIAL_ATTACK, &spatk);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_SP_DEF)
             {
-                SetMonData(mons[i],MON_DATA_SPECIAL_DEFENSE, &spdef);
+                SetMonData(mons[i], MON_DATA_SPECIAL_DEFENSE, &spdef);
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_PP_COUNTS)
             {
-                for(j = 0; j < 4; j++)
+                for (j = 0; j < 4; j++)
                 {
-                    SetMonData(mons[i],MON_DATA_MOVE1PP+j, &ppcounts[j]);
+                    SetMonData(mons[i], MON_DATA_MOVE1PP + j, &ppcounts[j]);
                 }
             }
             if (additionalflags & TRAINER_DATA_EXTRA_TYPE_NICKNAME)
             {
                 u32 one = 1;
 
-                SetMonData(mons[i],MON_DATA_HAS_NICKNAME, &one);
-                SetMonData(mons[i],MON_DATA_NICKNAME, nickname);
+                SetMonData(mons[i], MON_DATA_HAS_NICKNAME, &one);
+                SetMonData(mons[i], MON_DATA_NICKNAME, nickname);
             }
         }
         TrainerMonHandleFrustration(mons[i]);
@@ -470,7 +470,7 @@ extern u32 space_for_setmondata;
  *  @param encounterBattleParam battle param
  *  @return TRUE if PokeParty_Add was successful
  */
-BOOL LONG_CALL AddWildPartyPokemon(int inTarget, EncounterInfo *encounterInfo, struct PartyPokemon *encounterPartyPokemon, struct BATTLE_PARAM *encounterBattleParam)
+BOOL LONG_CALL AddWildPartyPokemon(int inTarget, EncounterInfo* encounterInfo, struct PartyPokemon* encounterPartyPokemon, struct BATTLE_PARAM* encounterBattleParam)
 {
     int range = 0;
     u8 change_form = 0;
@@ -506,13 +506,13 @@ BOOL LONG_CALL AddWildPartyPokemon(int inTarget, EncounterInfo *encounterInfo, s
     if (CheckScriptFlag(HIDDEN_ABILITIES_FLAG) == 1)
     {
         SET_MON_HIDDEN_ABILITY_BIT(encounterPartyPokemon)
-        ClearScriptFlag(HIDDEN_ABILITIES_FLAG);
+            ClearScriptFlag(HIDDEN_ABILITIES_FLAG);
         ResetPartyPokemonAbility(encounterPartyPokemon);
     }
 
     if (change_form)
     {
-        SetMonData(encounterPartyPokemon, MON_DATA_FORM, (u8 *)&form_no);
+        SetMonData(encounterPartyPokemon, MON_DATA_FORM, (u8*)&form_no);
         RecalcPartyPokemonStats(encounterPartyPokemon);
         ResetPartyPokemonAbility(encounterPartyPokemon);
         InitBoxMonMoveset(&encounterPartyPokemon->box);
@@ -523,10 +523,10 @@ BOOL LONG_CALL AddWildPartyPokemon(int inTarget, EncounterInfo *encounterInfo, s
     return PokeParty_Add(encounterBattleParam->poke_party[inTarget], encounterPartyPokemon);
 }
 
-void LONG_CALL SetupAndStartTutorialBattle(TaskManager *taskManager) {
-    struct BattleSetup *setup = BattleSetup_New_Tutorial(11, taskManager->fieldSystem);
+void LONG_CALL SetupAndStartTutorialBattle(TaskManager* taskManager) {
+    struct BattleSetup* setup = BattleSetup_New_Tutorial(11, taskManager->fieldSystem);
 
-    struct PartyPokemon *marill = Party_GetMonByIndex(setup->party[BATTLER_PLAYER], 0);
+    struct PartyPokemon* marill = Party_GetMonByIndex(setup->party[BATTLER_PLAYER], 0);
 
     // move slot 1 is tackle
     u16 data = MOVE_TACKLE;
@@ -549,7 +549,7 @@ void LONG_CALL SetupAndStartTutorialBattle(TaskManager *taskManager) {
     SetMonData(marill, MON_DATA_MOVE3, &data);
     SetMonData(marill, MON_DATA_MOVE4, &data);
 
-    void *encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
+    void* encounter = Encounter_New(setup, BattleSetup_GetWildTransitionEffect(setup), BattleSetup_GetWildBattleMusic(setup), NULL);
 
     TaskManager_Call(taskManager, Task_TutorialBattle, encounter);
 }

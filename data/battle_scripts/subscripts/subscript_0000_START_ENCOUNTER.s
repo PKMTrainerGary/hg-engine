@@ -36,6 +36,7 @@ _067:
     PrintGlobalMessage 1246, TAG_NICKNAME, BATTLER_CATEGORY_ENEMY
     GoTo _084
 
+
 _073:
     // The Distortion World’s {0} appeared!
     PrintGlobalMessage 1268, TAG_NICKNAME, BATTLER_CATEGORY_ENEMY
@@ -51,7 +52,6 @@ _TotemEncounter:
     Wait
     DoubleSize BATTLER_ENEMY
     GoTo _084
-
 
 _084:
     Wait 
